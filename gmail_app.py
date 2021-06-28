@@ -8,15 +8,13 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
-engine = db.create_engine('sqlite:///gmail.db', echo=True)
-meta = db.MetaData()
-
-
 mail = Table(
-   'mail', meta,
-   Column('id', Integer, primary_key=True),
-   Column('description', String),
-   Column('thID', String),
+    'mail', meta,
+    Column('id', Integer, primary_key=True),
+    Column('mail_to',String),
+    Column('mail_from', VARCHAR),
+    Column('mail_subject', String),
+    Column('mail_date', String)
 )
 session = Session()
 meta.create_all(engine)
@@ -47,20 +45,21 @@ def get_email_list():
     return results.get('messages',[])
 
 def get_email_content(message_id):
-    service=get_gmail_service()
-    results = service.users().messages().get(userId='me', id=message_id).execute()
-    data = {'snippet': results['snippet'],'threadId': results['threadId']}
+    service = get_gmail_service()
+    results = service.users().messages().get(userId='me', id=message_id, format='raw').execute()
+    msg_str = base64.urlsafe_b64decode(results['raw'].encode('ASCII'))
+    mine_msg = email.message_from_bytes(msg_str)
+    data = {'to': mine_msg['To'], 'from': mine_msg['From'], 'date': mine_msg['Date'], 'subject': mine_msg['Subject']}
     return data
 
 def store():
     engine = db.create_engine('sqlite:///gmail.db', echo=True)
     conn = engine.connect()
-    result = get_email_content('17a3e5114762c774')
-    conn.execute('INSERT INTO mail(description,thId) VALUES(:description,:thId)',
-                 (result['snippet']), result['threadId'])
-    print("entered successfully")
+    result= get_email_content('17a3e5114762c774')
+    conn.execute('INSERT INTO mail(mail_from,mail_to,mail_subject,mail_date) VALUES (:mail_from,:mail_to,:mail_subject,:mail_date)',
+                 result['from'], result['to'], result['subject'], result['date'])
+    print('logged successfully')
     conn.close()
-
 
 if __name__ == '__main__':
     store()
