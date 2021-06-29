@@ -60,11 +60,19 @@
                         "contains",
                         "internship"
                       ]
+                    },
+                    {
+                      "name": "date",
+                      "value": [
+                        "contains",
+                        "Thu, 24 Jun 2021"
+                      ]
                     }
+
                   ],
       "action": {
                   "addLabelIds": ["SENT"],
                   "removeLabelIds": []
                 }
-    }s
+    }
 }
