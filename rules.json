@@ -66,43 +66,5 @@
                   "addLabelIds": ["SENT"],
                   "removeLabelIds": []
                 }
-    },
-
-    "3":{
-      "predicate" : ["ANY"],
-      "criteria": [
-                    {
-                      "name": "from",
-                      "value": [
-                        "contains",
-                        "17a3e5114762c774"
-                      ]
-                    },
-                    {
-                      "name": "to",
-                      "value": [
-                        "contains",
-                        "anchanak011@gmail.com"
-                      ]
-                    },
-                    {
-                      "name": "subject",
-                      "value": [
-                        "contains",
-                        "internship"
-                      ]
-                    },
-                   {
-                      "name": "date",
-                      "value": [
-                        "contains",
-                        "Thu, 24 Jun 2021"
-                      ]
-                    }
-                  ],
-      "action": {
-                  "addLabelIds": ["RECEIVED"],
-                  "removeLabelIds": []
-                }
-    }
+    }s
 }
