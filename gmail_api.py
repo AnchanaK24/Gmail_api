@@ -115,7 +115,7 @@ def add_label():
     label={
         "labelListVisibility":"labelShow",
         "messageListVisibility":"show",
-        "name":"imp"
+        "name":"Received"
     }
     result=service.users().labels().create(userId='me', body=label).execute()
     print(result)
