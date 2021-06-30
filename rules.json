@@ -24,18 +24,14 @@
                       ]
                     },
                     {
-                      "name": "date",
+                      "name": "datereceived",
                       "value": [
-                        "contains",
-                        "Thu, 24 Jun 2021"
+                        "is less than",
+                        "10days old"
                       ]
                     }
 
-                  ],
-      "action": {
-                  "addLabelIds": ["SENT"],
-                  "removeLabelIds": []
-                }
+                  ]
     },
   "2":{
       "predicate" : ["ANY"],
@@ -62,17 +58,13 @@
                       ]
                     },
                     {
-                      "name": "date",
+                      "name": "datereceived",
                       "value": [
-                        "contains",
-                        "Thu, 24 Jun 2021"
+                        "is less than",
+                        "10days old"
                       ]
                     }
 
-                  ],
-      "action": {
-                  "addLabelIds": ["SENT"],
-                  "removeLabelIds": []
-                }
+                  ]
     }
 }
