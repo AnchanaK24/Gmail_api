@@ -32,10 +32,6 @@
                     }
 
                   ],
-      "action": {
-                  "addLabelId": ["RECEIVED"],
-                  "removeLabelId": []
-                }
     },
   "2":{
       "predicate" : ["ANY"],
@@ -69,10 +65,5 @@
                       ]
                     }
 
-                  ],
-      "action": {
-                  "addLabelIds": ["SENT"],
-                  "removeLabelIds": []
-                }
-    }
+                  ]
 }
