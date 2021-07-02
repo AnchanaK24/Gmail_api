@@ -36,13 +36,17 @@ def mark_as_unread():
         print(rule['name'], rule['value'])
         service = get_gmail_service()
         service.users().messages().modify(userId='me', id='17a3e5114762c774',body={'addLabelIds': ['UNREAD']}).execute()
+        conn.close
 
 def mark_as_read():
+    engine = db.create_engine('sqlite:///gmail.db', echo=True)
+    engine.connect()
     rules = json.load(open('rules.json'))
     for rule in rules["1"]["criteria"]:
         print(rule['name'], rule['value'])
         service = get_gmail_service()
         service.users().messages().modify(userId='me', id='17a3e5114762c774',body={'removeLabelIds': ['UNREAD']}).execute()
+        conn.close()
 
 def starred():
     engine = db.create_engine('sqlite:///gmail.db', echo=True)
@@ -52,6 +56,7 @@ def starred():
         print(rule['name'], rule['value'])
         service = get_gmail_service()
         service.users().messages().modify(userId='me', id='17a3e5114762c774', body={'addLabelIds': ['STARRED']}).execute()
+        conn.close()
 
 def archive():
     engine = db.create_engine('sqlite:///gmail.db', echo=True)
@@ -61,6 +66,7 @@ def archive():
         print(rule['name'], rule['value'])
         service = get_gmail_service()
         service.users().messages().modify(userId='me', id='17a3e5114762c774', body={'addLabelIds': ['INBOX']}).execute()
+        conn.close()
 
 def add_label():
     service = get_gmail_service()
