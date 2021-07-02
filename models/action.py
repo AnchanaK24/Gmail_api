@@ -39,7 +39,7 @@ def mark_as_unread():
 
 def mark_as_read():
     rules = json.load(open('rules.json'))
-    for rule in rules["rule1"]["fields"]:
+    for rule in rules["1"]["criteria"]:
         print(rule['name'], rule['value'])
         service = get_gmail_service()
         service.users().messages().modify(userId='me', id='17a3e5114762c774',body={'removeLabelIds': ['UNREAD']}).execute()
