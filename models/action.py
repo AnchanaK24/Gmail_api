@@ -39,7 +39,7 @@ def all_labels():
 
 
 def create_label():
-    service = get_service()
+    service = get_gmail_service()
     label = {
         "labelListVisibility": "labelShow",
         "messageListVisibility": "show",
@@ -53,7 +53,7 @@ def move_msg_to_label():
     rules = json.load(open('rules.json'))
     for rule in rules["rule1"]['fields']:
         print(rule['name'], rule['value'])
-    service = get_service()
+    service = get_gmail_service()
     service.users().messages().modify(userId='me', id='17a3e5114762c774',
                                       body={'removeLabelIds': ['STARRED']}).execute()
 
