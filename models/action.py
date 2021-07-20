@@ -54,7 +54,7 @@ def move_msg_to_label():
     for rule in rules["rule1"]['fields']:
         print(rule['name'], rule['value'])
     service = get_service()
-    service.users().messages().modify(userId='me', id='17a46732ac59fcb9',
+    service.users().messages().modify(userId='me', id='17a3e5114762c774',
                                       body={'removeLabelIds': ['STARRED']}).execute()
 
 
