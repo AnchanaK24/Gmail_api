@@ -1,19 +1,21 @@
 from __future__ import print_function
-from main import db
+
 import json
 import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+from models.gmail import get_service
 
-SCOPES = 'https://www.googleapis.com/auth/gmail.modify'
+# If modifying these scopes, delete the file token.json.
+SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
 
 def all_labels():
     creds = None
-    if os.path.exists('../token.json'):
-        creds = Credentials.from_authorized_user_file('../token.json', SCOPES)
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
@@ -21,66 +23,42 @@ def all_labels():
             flow = InstalledAppFlow.from_client_secrets_file(
                 '../client.json', SCOPES)
             creds = flow.run_local_server(port=0)
-        with open('../token.json', 'w') as token:
+        with open('token.json', 'w') as token:
             token.write(creds.to_json())
 
     service = build('gmail', 'v1', credentials=creds)
-    return service
+    results = service.users().labels().list(userId='me').execute()
+    labels = results.get('labels', [])
+
+    if not labels:
+        print('No labels found.')
+    else:
+        print('Labels:')
+        for label in labels:
+            print(label['name'])
 
 
-def mark_as_unread():
-    engine = db.create_engine('sqlite:///gmail.db', echo=True)
-    engine.connect()
-    rules = json.load(open('rules.json'))
-    for rule in rules["1"]["criteria"]:
-        print(rule['name'], rule['value'])
-        service = get_gmail_service()
-        service.users().messages().modify(userId='me', id='17a3e5114762c774',body={'addLabelIds': ['UNREAD']}).execute()
-        conn.close
-
-def mark_as_read():
-    engine = db.create_engine('sqlite:///gmail.db', echo=True)
-    engine.connect()
-    rules = json.load(open('rules.json'))
-    for rule in rules["1"]["criteria"]:
-        print(rule['name'], rule['value'])
-        service = get_gmail_service()
-        service.users().messages().modify(userId='me', id='17a3e5114762c774',body={'removeLabelIds': ['UNREAD']}).execute()
-        conn.close()
-
-def starred():
-    engine = db.create_engine('sqlite:///gmail.db', echo=True)
-    engine.connect()
-    rules = json.load(open('rules.json'))
-    for rule in rules["1"]["criteria"]:
-        print(rule['name'], rule['value'])
-        service = get_gmail_service()
-        service.users().messages().modify(userId='me', id='17a3e5114762c774', body={'addLabelIds': ['STARRED']}).execute()
-        conn.close()
-
-def archive():
-    engine = db.create_engine('sqlite:///gmail.db', echo=True)
-    engine.connect()
-    rules = json.load(open('rules.json'))
-    for rule in rules["1"]["criteria"]:
-        print(rule['name'], rule['value'])
-        service = get_gmail_service()
-        service.users().messages().modify(userId='me', id='17a3e5114762c774', body={'addLabelIds': ['INBOX']}).execute()
-        conn.close()
-
-def add_label():
-    service = get_gmail_service()
-    label={
-        "labelListVisibility":"labelShow",
-        "messageListVisibility":"show",
-        "name":"Delete"
+def create_label():
+    service = get_service()
+    label = {
+        "labelListVisibility": "labelShow",
+        "messageListVisibility": "show",
+        "name": "imp"
     }
-    result=service.users().labels().create(userId='me', body=label).execute()
-    print(result)
+    results = service.users().labels().create(userId='me', body=label).execute()
+    print(results)
+
+
+def move_msg_to_label():
+    rules = json.load(open('rules.json'))
+    for rule in rules["rule1"]['fields']:
+        print(rule['name'], rule['value'])
+    service = get_service()
+    service.users().messages().modify(userId='me', id='17a46732ac59fcb9',
+                                      body={'removeLabelIds': ['STARRED']}).execute()
+
 
 if __name__ == '__main__':
-    all_label()
-    mark_as_unread()
-    starred()
-    archive()
-    add_label()
+    all_labels()
+    move_msg_to_label()
+    create_label():
