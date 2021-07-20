@@ -11,7 +11,7 @@ from models.gmail import get_mail
 SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 
 
-def get_service():
+def get_gmail_service():
     creds = None
     if os.path.exists('../token.json'):
         creds = Credentials.from_authorized_user_file('../token.json', SCOPES)
@@ -43,7 +43,7 @@ def mark_as_unread():
     rules = json.load(open('rules.json'))
     for rule in rules["rule1"]["fields"]:
         print(rule['name'], rule['value'])
-        service = get_service()
+        service = get_gmail_service()
         service.users().messages().modify(userId='me', id=''17a3e5114762c774'',
                                           body={'addLabelIds': ['UNREAD']}).execute()
 
@@ -53,7 +53,7 @@ def mark_as_unread():
     rules = json.load(open('rules.json'))
     for rule in rules["rule1"]["fields"]:
         print(rule['name'], rule['value'])
-        service = get_service()
+        service = get_gmail_service()
         service.users().messages().modify(userId='me', id=''17a3e5114762c774'',
                                           body={'removeLabelIds': ['UNREAD']}).execute()
 
@@ -62,7 +62,7 @@ def archive_mail():
     rules = json.load(open('rules.json'))
     for rule in rules["rule1"]["fields"]:
         print(rule['name'], rule['value'])
-        service = get_service()
+        service = get_gmail_service()
         service.users().messages().modify(userId='me', id=''17a3e5114762c774'',
                                           body={'removeLabelIds': ['INBOX']}).execute()
 
