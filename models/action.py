@@ -10,7 +10,7 @@ from google.oauth2.credentials import Credentials
 SCOPES = 'https://www.googleapis.com/auth/gmail.modify'
 
 
-def get_gmail_service():
+def all_labels():
     creds = None
     if os.path.exists('../token.json'):
         creds = Credentials.from_authorized_user_file('../token.json', SCOPES)
@@ -79,6 +79,7 @@ def add_label():
     print(result)
 
 if __name__ == '__main__':
+    all_label()
     mark_as_unread()
     starred()
     archive()
